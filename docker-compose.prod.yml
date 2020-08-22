@@ -1,0 +1,61 @@
+version: "3"
+
+services:
+  nginx:
+    image: antizero58/docker-course:nginx
+    restart: always
+    ports:
+      - 80:80
+
+  apache:
+    image: antizero58/docker-course:apache
+    restart: always
+    ports:
+      - 88:80
+
+  php:
+    image: antizero58/docker-course:php
+    restart: always
+    volumes:
+      - runtime:/var/www/app/runtime
+
+  redis:
+    image: redis:4.0.9
+    restart: always
+    volumes:
+      - redis-data:/data
+    command: '--appendonly yes'
+
+  mongo:
+    image: mongo:3.6.3
+    restart: always
+    volumes:
+      - mongo-data:/data/db
+
+  postgres:
+    image: postgres:10.12
+    restart: always
+    environment:
+      POSTGRES_DB: postgres_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  mysql:
+    image: "mysql:5.7.30"
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: "mysql_db"
+      MYSQL_ROOT_PASSWORD: "password"
+    volumes:
+      - "mysql-data:/var/lib/mysql"
+
+volumes:
+  redis-data:
+  mongo-data:
+  postgres-data:
+  mysql-data:
+  runtime:
